@@ -41,6 +41,7 @@ module Barby
     register :to_html
 
     attr_accessor :class_name
+    attr_accessor :vertical
 
 
     def to_html(options = {})
@@ -54,7 +55,11 @@ module Barby
       if barcode.two_dimensional?
         rows_for(booleans)
       else
-        rows_for([booleans])
+        if vertical
+          rows_for(booleans.map{|c| [c] })
+        else
+          rows_for([booleans])
+        end
       end
     end
 
@@ -68,7 +73,7 @@ module Barby
     end
 
     def row_for(cells)
-      cells.map{|c| "<tr class=\"barby-row\">#{c}</tr>" }.join
+      "<tr class=\"barby-row\">#{cells.join}</tr>"
     end
 
     def on_cell
